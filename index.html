@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 활용 자기소개서 작성 도구</title>
+    <!-- Pretendard 폰트 CDN -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <style>
+        :root {
+            --bg-primary: #1d80a3;      /* 상단 헤더 배경색 (옥색/청록색) */
+            --navy-dark: #354a54;       /* 메인 텍스트 컬러 */
+            --gray-sub: #99aebb;        /* 테두리 및 구분선 */
+            --light-mint: #e6f4f1;      /* 안내 박스 배경색 */
+            --accent-orange: #f0962d;   /* AI활용 뱃지 & 버튼 포인트 색상 */
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f4f8fa;
+            color: var(--navy-dark);
+            line-height: 1.6;
+        }
+
+        /* 1. 상단 헤더 영역 */
+        .header {
+            background-color: var(--bg-primary);
+            color: #ffffff;
+            padding: 50px 20px 80px;
+            text-align: center;
+        }
+
+        /* AI활용 포인트 뱃지 (제목 상단 중앙 배치) */
+        .badge-ai {
+            display: inline-block;
+            background-color: var(--accent-orange);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 800;
+            padding: 6px 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        /* 메인 제목 : 48pt, 볼드, 흰색 */
+        .header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: #ffffff;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 안내 문구 */
+        .header-desc {
+            font-size: 17px;
+            font-weight: 500;
+            color: #ffffff;
+            max-width: 680px;
+            margin: 0 auto;
+            word-break: keep-all;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        /* 2. 메인 컨테이너 및 카드 */
+        .main-container {
+            max-width: 760px;
+            margin: -40px auto 50px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 36px 30px;
+            border: 1px solid rgba(153, 174, 187, 0.3);
+            box-shadow: 0 10px 25px rgba(53, 74, 84, 0.1);
+        }
+
+        /* 3. 사용법 안내 박스 */
+        .guide-box {
+            background-color: var(--light-mint);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .instruction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 18px 0;
+            font-size: 15px;
+        }
+
+        .instruction-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--navy-dark);
+            word-break: keep-all;
+        }
+
+        .instruction-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 박스 하단 우측 제작자 정보 */
+        .creator-info {
+            text-align: right;
+            font-size: 14px;
+            color: var(--navy-dark);
+            font-weight: 600;
+            border-top: 1px dashed rgba(53, 74, 84, 0.15);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        /* 4. 입력 폼 스타일 */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--navy-dark);
+        }
+
+        .required {
+            color: #e11d48;
+            margin-left: 2px;
+        }
+
+        /* 작성항목 라디오 버튼 그룹 */
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            border: 1px solid var(--gray-sub);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            background-color: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .radio-label input[type="radio"] {
+            margin-right: 8px;
+            accent-color: var(--bg-primary);
+            width: 16px;
+            height: 16px;
+        }
+
+        .radio-label:hover {
+            border-color: var(--bg-primary);
+            background-color: #f0f8fa;
+        }
+
+        /* 텍스트 입력창 */
+        .form-group input[type="text"], 
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 15px;
+            font-size: 14.5px;
+            border: 1px solid var(--gray-sub);
+            border-radius: 8px;
+            font-family: inherit;
+            color: var(--navy-dark);
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input[type="text"]:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(29, 128, 163, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 110px;
+            line-height: 1.5;
+        }
+
+        /* 5. 분석결과확인 버튼 */
+        .btn-submit {
+            width: 100%;
+            background-color: var(--accent-orange);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 800;
+            padding: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(240, 150, 45, 0.25);
+        }
+
+        .btn-submit:hover {
+            opacity: 0.93;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        /* 6. 하단 푸터 영역 */
+        .footer-container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 20px 50px;
+            text-align: center;
+        }
+
+        .footer-line {
+            height: 1px;
+            background-color: var(--gray-sub);
+            opacity: 0.5;
+            margin-bottom: 24px;
+        }
+
+        .footer-text {
+            font-size: 13.5px;
+            color: var(--navy-dark);
+            line-height: 1.7;
+        }
+
+        .footer-text .copyright {
+            margin-top: 10px;
+            color: #788d9b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 섹션 -->
+    <header class="header">
+        <div class="badge-ai">AI활용</div>
+        <h1>자기소개서 작성 도구</h1>
+        <p class="header-desc">
+            AI가 지어내는 가짜 자기소개서를 대신하여, </p>
+나만의 경험을 바탕으로 구체적이고 진솔한 자기소개서 작성을 도와드립니다.
+        </p>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="main-container">
+        <div class="card">
+            
+            <!-- 사용법 안내 네모박스 -->
+            <section class="guide-box">
+                <ul class="instruction-list">
+                    <li>💡 질문에 답변을 입력한 후 <strong>[분석결과확인]</strong>을 클릭하세요.</li>
+                    <li>📋 자동으로 복사된 내용을 새로 열린 ChatGPT 창에 <strong>붙여넣기(Ctrl+V)</strong> 하세요.</li>
+                    <li>🎯 생성된 자기소개서를 취업 준비에 유용하게 활용하세요.</li>
+                    <li>🔒 입력하신 내용은 별도로 저장되지 않으니 <strong>안심</strong>하고 이용하셔도 됩니다.</li>
+                </ul>
+                <div class="creator-info">
+                    기획·제작 중부여성발전센터 직업상담사 김소이</p>
+ &nbsp;|&nbsp; 문의 02-719-6051
+                </div>
+            </section>
+
+            <!-- 입력 폼 -->
+            <form id="resumeForm">
+                
+                <!-- 작성항목 (라디오 버튼) -->
+                <div class="form-group">
+                    <label>작성항목 선택 <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="item" value="지원동기" checked> 지원동기
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="item" value="직무관련경험및경력"> 직무관련경험및경력
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="item" value="직무관련성격의장단점"> 직무관련성격의장단점
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="item" value="입사후포부"> 입사후포부
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 모집부문 -->
+                <div class="form-group">
+                    <label for="recruit">모집부문 <span class="required">*</span></label>
+                    <input type="text" id="recruit" placeholder="지원하는 회사명, 부서명 등을 기재해주세요. (예: ○○제약 연구개발부문 BD, △△투자증권 PB 인턴)" required>
+                </div>
+
+                <!-- 주요담당업무 -->
+                <div class="form-group">
+                    <label for="duty">주요담당업무 <span class="required">*</span></label>
+                    <textarea id="duty" placeholder="채용공고상의 주요담당업무 또는 본인이 생각한 주요 담당업무를 기재해주세요." required></textarea>
+                </div>
+
+                <!-- 나의 경험 -->
+                <div class="form-group">
+                    <label for="experience">나의 경험 <span class="required">*</span></label>
+                    <textarea id="experience" placeholder="해당 업무와 연관된 자신의 경험을 자세하게 작성해주세요." required></textarea>
+                </div>
+
+                <!-- 강조하고 싶은 역량 -->
+                <div class="form-group">
+                    <label for="capacity">강조하고 싶은 역량 <span class="required">*</span></label>
+                    <input type="text" id="capacity" placeholder="해당 경험에서 강조하고 싶은 핵심 역량을 작성해주세요." required>
+                </div>
+
+                <!-- [선택] 기존 자기소개서/경험글 -->
+                <div class="form-group">
+                    <label for="original">[선택] 기존 자기소개서 / 경험글</label>
+                    <textarea id="original" placeholder="기존에 작성해둔 자기소개서 초안이나 관련 메모가 있다면 입력해주세요. (선택사항)"></textarea>
+                </div>
+
+                <!-- 분석결과확인 버튼 -->
+                <button type="submit" class="btn-submit">분석결과확인</button>
+            </form>
+
+        </div>
+    </main>
+
+    <!-- 하단 푸터 영역 -->
+    <div class="footer-container">
+        <div class="footer-line"></div>
+        <footer class="footer-text">
+            <p><strong>기획 · 제작 ｜ 직업상담사 김소이</strong></p>
+            <p>본 도구는 구직자의 성공적인 취업 준비를 지원하기 위해 제작되었습니다. </p>
+            <p>상담·교육·문의 : imsoyi@nate.com</p>
+            <p class="copyright">© 2026 김소이. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript 기능 -->
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 입력값 가져오기
+            const selectedItem = document.querySelector('input[name="item"]:checked').value;
+            const recruit = document.getElementById('recruit').value.trim();
+            const duty = document.getElementById('duty').value.trim();
+            const experience = document.getElementById('experience').value.trim();
+            const capacity = document.getElementById('capacity').value.trim();
+            const original = document.getElementById('original').value.trim() || '없음';
+
+            // 프롬프트 조합
+            const compiledPrompt = `[Role]
+You are a top-tier HR recruitment expert and an expert "Human-Touch Statement Editor." Your mission is to transform rough experience details provided by job seekers into high-quality, professional self-introduction essays (자기소개서) suitable for passing HR screenings in South Korea.
+Even if the user input contains typos, grammatical errors, informal tone (반말), colloquialisms, or incomplete phrases, you must accurately grasp the context and rewrite it into a polished, executive-level draft written in Korean.
+
+[⚠️ Absolute Guidelines (Accuracy & Readability)]
+1. Human-Touch Writing Style (Avoid AI-generated clichés):
+   - ABSOLUTELY PROHIBITED: Abstract buzzwords, awkward English-translated phrases, and overused AI transition words such as '혁신적인' (innovative), '시너지' (synergy), '최적의 솔루션' (optimal solution), '또한/따라서/결론적으로' (furthermore/therefore/in conclusion).
+   - Write in a clean, authentic, and grounded tone of an actual industry candidate.
+2. Clean Text & Formatting Rules:
+   - NEVER use asterisks (**), bold tags, special symbols, or single quotes in the main body text. (Only bracket [] formatting is permitted for the subtitle).
+   - Minimize the use of commas (,) and break sentences clearly for maximum readability.
+3. Length & Structure Control:
+   - Target Length: 500 to 800 Korean characters including spaces (공백 포함 500자~800자).
+   - Structure: Exactly 3 paragraphs [Introduction - Body - Conclusion] with line breaks between paragraphs.
+4. Output Constraint:
+   - Output ONLY in Korean.
+   - Do NOT include evaluation scores, diagnostic reports, commentary, or greetings. Output ONLY the [Subtitle + 3-Paragraph Essay Draft] immediately.
+
+[💡 Handling Optional Original Text (${original})]
+If the user provides text in the {original} variable, apply the following strictly:
+- Standardization: Do NOT retain grammatical errors, typos, or informal slang from {original}; refine them into standard professional business Korean (표준 비즈니스 문체).
+- Fact Extraction: Extract specific facts, tools, project names, and key accomplishments from {original} to supplement {experience}.
+- Authentic Tone: Use {original} to understand the applicant's natural expressions while maintaining a high standard of professional writing.
+
+[Item-Specific Nuance & Writing Logic]
+Apply the following specific strategic logic based on the user's selected item (${selectedItem}):
+
+■ A. Support Motivation (지원동기)
+- Core Question to Answer: "Why should we hire you over others?"
+- Logic: Combine understanding of the company/position + brief relevant experience + key motivation to prove why the company must hire this applicant.
+
+■ B. Job-Related Experience & Accomplishments (직무관련경험및경력)
+- Core Question to Answer: "Can you actually do the job well?"
+- Logic: Connect the user's experience with the key duties (${duty}). Demonstrate practical capability using job-relevant Knowledge and Skills.
+
+■ C. Job-Related Personality Strengths & Weaknesses (직무관련 성격의 장단점)
+- Core Question to Answer: "Will you fit well into our team culture?"
+- Logic: Emphasize attitude and professional mindset suited for the role and workplace culture.
+  - Strengths (75%): Describe job-advantageous personality traits backed by clear examples.
+  - Weaknesses (25%): State realistic, relatable weaknesses non-fatal to the role + concrete efforts made to overcome them. (If a critical weakness is inputted, reframe it into a constructive, self-aware growth area).
+
+■ D. Future Goals & Career Plan (입사후 포부)
+- Core Question to Answer: "What tangible contribution will you bring to our company?"
+- Logic: Present realistic and convincing goals based on job understanding.
+  - Framing: Structure by timeframes (Initial onboarding -> 3 years -> 5 years) or functional areas (e.g., operational management, training, performance targets) so HR managers can easily agree and follow along.
+
+[Input Data]
+- Item Choice: ${selectedItem}
+- Recruitment Target: ${recruit}
+- Key Duties: ${duty}
+- My Experience: ${experience}
+- Target Competency: ${capacity}
+- [Optional] Original Text: ${original}
+
+[Output Format]
+*CRITICAL: Output the entire response in Korean language only.*
+
+[소제목: 핵심 역량과 성과를 담은 한 문장]
+
+(서론: 입력된 정보를 바탕으로 한 도입부 및 핵심 주장 - 약 150자)
+
+(본론: 구체적인 경험 사례, Action, 장단점 내용, 또는 단계별 실행 계획 - 약 350~400자)
+
+(결론: 직무 기여 방식 및 마무리 - 약 150자)`;
+
+            // 클립보드에 프롬프트 복사 후 ChatGPT 열기
+            navigator.clipboard.writeText(compiledPrompt).then(function() {
+                alert('입력된 내용 기반의 생성용 프롬프트가 클립보드에 자동 복사되었습니다!\n\n새로 열리는 ChatGPT 창에 붙여넣기(Ctrl+V) 하세요.');
+                window.open('https://chatgpt.com/', '_blank');
+            }).catch(function(err) {
+                console.error('클립보드 복사 실패:', err);
+                alert('복사에 실패했습니다. 브라우저의 클립보드 권한 설정을 확인해주세요.');
+            });
+        });
+    </script>
+</body>
+</html>
